@@ -1,33 +1,40 @@
+# built-in
+import sys
+import os
 import random
 
-from creator.character import Character
+# customized
+from utils.validation import *
+from entity import Entity
 
 
-class Monster(Character):
-    # 몬스터도 랭크 말고 레벨로 변수명 똑같이 하는 거 어떨까요? 캐릭터클래스에 일반공격을 넣어놨는데 레벨(랭크)에 따라 공격성공률이 다르게 설정해가지구요..!! -민정
-    def __init__(self, name, rank, skill):
-        super().__init__(name)
-        # self._name = name     <- 몬스터도 캐릭터 클래스를 상속받음 - 민정
-        self._level = rank
+def get_direct_dir_path(round: int) -> str:
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+
+    for _ in range(round):
+        current_dir = os.path.dirname(current_dir)
+
+    return current_dir
+
+
+utils_dir_path = get_direct_dir_path(1)
+sys.path.append(utils_dir_path)
+
+
+class Monster(Entity):
+    def __init__(self, name: str, hp: int, mp: int, str_: int, int_: int, dex_: int, rank: int, skill: str = ""):
+        super().__init__(name, hp, mp, str_, int_, dex_)
         self._rank = rank
         self._skill = skill
-        self._is_alive = True
+        self._current_hp = rank * 75
 
-        if self._rank == 1:
-            random_value = random.randint(60, 80)
-            self._current_hp = random_value
-            self._max_hp = random_value
-            self._power = random.randint(7, 15)
-        elif self._rank == 2:
-            random_value = random.randint(80, 100)
-            self._current_hp = random_value
-            self._max_hp = random_value
-            self._power = random.randint(25, 35)
-        else:
-            random_value = random.randint(100, 200)
-            self._current_hp = random_value
-            self._max_hp = random_value
-            self._power = random.randint(50, 75)
+        normal_attack_random_value = random.randint(-2, 6)
+        special_attack_random_value = random.randint(-4, 8)
+
+        self.actions = {
+            "1": {"verbose": "", "is_area_attack": False, "damage": rank*10 + normal_attack_random_value},
+            "2": {"verbose": skill, "is_""is_area_attack": False, "damage": rank*20 + special_attack_random_value}
+        }
 
     def show_skill(self):
         print(f"[{self._name}]몬스터가 [{self._skill}] 스킬을 사용했습니다.")

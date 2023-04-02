@@ -1,11 +1,11 @@
 import random
 import sys
 # 사용자 정의 모듈
-from creator.player import create_player, Player
-from creator.monster import Monster
-from scripts.script import *
+from .utils.creator.player import create_player, Player
+from .utils.creator.monster import Monster
+from .utils.scripts.script import *
 
-intro()
+# intro()
 
 player = create_player()
 
@@ -133,7 +133,7 @@ while not game_exit:
             _monster_name_list = []
 
             p = random.random()
-            if p < 0.1:
+            if p < 0.4:
                 func(_monster_dict, _monster_list, _monster_name_list, 1)
 
             elif p < 0.8:
@@ -202,10 +202,8 @@ while not game_exit:
 
         is_battle = is_battle_or_not()
 
-        # is_battle이 False일 때, 던전에서 탈출
-        is_in_dungeon = False
-
-        # is_battle이 True일 때, 전투 돌입
+        if not is_battle:
+            is_in_dungeon = False
 
         # 4. 전투 돌입
         while is_battle:
